@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Little Princess's Wishing List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Sans+TC:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --soft-pink: #ffdae0;
+            --deep-pink: #ff8da1;
+            --cream: #fff9fb;
+            --text-grey: #555;
+            --gold: #d4af37;
+            --whatsapp-green: #25D366;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--cream);
+            font-family: 'Noto Sans TC', sans-serif;
+            color: var(--text-grey);
+            margin: 0; padding: 0; overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* 1. Magic Stars Trail Style */
+        .star {
+            position: fixed;
+            top: 0; left: 0;
+            width: 10px; height: 10px;
+            background: var(--deep-pink);
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 9999;
+            opacity: 0.6;
+            transform: scale(1);
+            transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        }
+
+        .hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .heart { position: absolute; color: var(--soft-pink); animation: float 7s infinite ease-in; opacity: 0; }
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 40px 20px;
+            background: linear-gradient(to bottom, #ffeef1, var(--cream));
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--deep-pink); margin: 0; }
+
+        .countdown-container {
+            margin: 20px auto; max-width: 600px; background: white; padding: 15px 25px;
+            border-radius: 50px; box-shadow: 0 4px 15px rgba(255, 141, 161, 0.1);
+            display: flex; justify-content: center; gap: 15px; font-weight: 500;
+        }
+        .countdown-item { flex: 1; text-align: center; }
+        .countdown-num { display: block; font-size: 1.5rem; color: var(--deep-pink); }
+        .countdown-label { font-size: 0.7rem; color: #999; text-transform: uppercase; }
+
+        #quote-area {
+            font-style: italic; margin-top: 10px; color: #ff8da1; min-height: 45px;
+            font-size: 0.95rem; transition: opacity 0.5s;
+        }
+
+        /* 修正後的 Tip Banner CSS */
+        .tip-banner {
+            max-width: 800px; 
+            margin: 20px auto; 
+            width: calc(100% - 40px); 
+            box-sizing: border-box; 
+            background: rgba(255, 218, 224, 0.4);
+            padding: 15px 20px; 
+            border-radius: 15px; 
+            text-align: center;
+            font-size: 0.85rem; 
+            color: #777; 
+            border: 1px dashed var(--deep-pink); 
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;
+        }
+
+        .item-card {
+            background: white; border-radius: 20px; padding: 25px 15px; text-align: center;
+            box-shadow: 0 8px 20px rgba(255, 141, 161, 0.08); transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+        }
+        .item-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(255, 141, 161, 0.15); }
+
+        .cash-card { border: 2px solid var(--gold); background: #fffdf5; }
+        .whatsapp-card { border: 2px solid var(--whatsapp-green); background: #f7fffb; }
+
+        .icon { font-size: 45px; margin-bottom: 10px; display: block; }
+        h3 { color: var(--deep-pink); font-size: 1.1rem; margin: 10px 0 5px 0; }
+        .cash-card h3 { color: var(--gold); }
+        .whatsapp-card h3 { color: var(--whatsapp-green); }
+        p { font-size: 0.85rem; margin-bottom: 15px; color: #999; min-height: 40px; }
+
+        .btn {
+            display: inline-block; padding: 10px 20px; background-color: var(--deep-pink);
+            color: white !important; text-decoration: none; border-radius: 25px; font-size: 0.9rem; transition: 0.3s;
+        }
+        .cash-btn { background-color: var(--gold); }
+        .wa-btn { background-color: var(--whatsapp-green); }
+        .btn:hover { opacity: 0.9; }
+
+        #scrollTopBtn {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background-color: var(--deep-pink); color: white; border: none; border-radius: 50%;
+            font-size: 24px; cursor: pointer; opacity: 0; transition: opacity 0.3s;
+            z-index: 100; display: flex; align-items: center; justify-content: center;
+        }
+        #scrollTopBtn.visible { opacity: 0.5; }
+        #scrollTopBtn:hover { opacity: 1; }
+
+        footer { text-align: center; padding: 60px 20px; color: #b5a4a7; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="hearts" id="heartContainer"></div>
+
+    <header>
+        <h1>A Gift for Our Baby Girl To To Chan</h1>
+        <div class="countdown-container" id="countdown">
+            <div class="countdown-item"><span class="countdown-num" id="days">00</span><span class="countdown-label">Days</span></div>
+            <div class="countdown-item"><span class="countdown-num" id="hours">00</span><span class="countdown-label">Hours</span></div>
+            <div class="countdown-item"><span class="countdown-num" id="minutes">00</span><span class="countdown-label">Mins</span></div>
+            <div class="countdown-item"><span class="countdown-num" id="seconds">00</span><span class="countdown-label">Secs</span></div>
+        </div>
+        <div id="quote-area">"A daughter is a gift of love." / 女兒是愛的禮物。</div>
+    </header>
+
+    <div class="tip-banner">
+        💡 <b>溫馨小貼士：</b>若您選購了某項禮物，歡迎 WhatsApp 通知我們，以便我們更新清單！<br>
+        If you've picked a gift, feel free to let us know via WhatsApp!
+    </div>
+
+    <div class="container" id="registryGrid"></div>
+
+    <button id="scrollTopBtn" onclick="window.scrollTo(0,0)">↑</button>
+
+    <footer>
+        <p>感謝大家的慷慨與愛！<br>Thank you for your generosity and love!</p>
+    </footer>
+
+    <script>
+        // --- 1. SETTINGS ---
+        const dueDate = new Date(2026, 4, 23).getTime(); 
+        const quotes = [
+            '"A daughter is a gift of love." / 女兒是愛的禮物。',
+            '"Little girls are made of sugar and spice." / 小女孩是由糖與香料組成的。',
+            '"The first milestone of a new journey." / 開啟新旅程的第一個里程碑。',
+            '"Your presence is the greatest gift." / 您的參與就是最好的禮物。'
+        ];
+
+        // --- 2. SCROLL TOP BUTTON LOGIC ---
+        window.onscroll = function() {
+            const scrollBtn = document.getElementById('scrollTopBtn');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { 
+                scrollBtn.classList.add('visible'); 
+            } else { 
+                scrollBtn.classList.remove('visible'); 
+            }
+        };
+
+        // --- 3. MAGIC STARS TRAIL ---
+        document.addEventListener('mousemove', function(e) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = e.clientX + 'px';
+            star.style.top = e.clientY + 'px';
+            const colors = ['#ffdae0', '#ff8da1', '#ffb6c1'];
+            star.style.background = colors[Math.floor(Math.random() * colors.length)];
+            document.body.appendChild(star);
+            setTimeout(() => {
+                star.style.transform = `scale(0.1) translateY(${Math.random() * 50}px)`;
+                star.style.opacity = '0';
+            }, 10);
+            setTimeout(() => { star.remove(); }, 800);
+        });
+
+        // --- 4. COUNTDOWN ---
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = dueDate - now;
+            if (diff > 0) {
+                document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- 5. QUOTES ---
+        let quoteIndex = 0;
+        setInterval(() => {
+            const qArea = document.getElementById('quote-area');
+            qArea.style.opacity = 0;
+            setTimeout(() => {
+                quoteIndex = (quoteIndex + 1) % quotes.length;
+                qArea.innerText = quotes[quoteIndex];
+                qArea.style.opacity = 1;
+            }, 500);
+        }, 5000);
+
+        // --- 6. ITEMS LIST (Google Search Keywords Updated to Chinese) ---
+        const items = [
+            { type: 'special', icon: "🧧", zh: "紅包祝福", en: "Cash Donation (PayMe)", link: "https://payme.hsbc/totowishinglist", class: "cash-card", btnClass: "cash-btn" },
+            { type: 'special', icon: "💬", zh: "傳送祝福", en: "Send Blessing (WhatsApp)", link: "https://wa.me/14373291212", class: "whatsapp-card", btnClass: "wa-btn" },
+            { icon: "🪑", zh: "哺乳搖椅", en: "Nursery glider", q: "哺乳搖椅" },
+            { icon: "👑", zh: "高腳餐椅", en: "High chair", q: "嬰兒高腳餐椅" },
+            { icon: "🌙", zh: "床邊嬰兒床", en: "Bedside bassinet", q: "床邊嬰兒床" },
+            { icon: "😴", zh: "嬰兒搖椅/鞦韆", en: "Baby swing (sleeper)", q: "嬰兒電動搖椅" },
+            { icon: "🗄️", zh: "尿布收納櫃", en: "Baby changing cabinet", q: "嬰兒尿布收納櫃" },
+            { icon: "🤱", zh: "嬰兒背帶", en: "Baby carrier", q: "嬰兒背帶" },
+            { icon: "👗", zh: "嬰兒衣櫥套裝", en: "Baby’s closet set", q: "嬰兒衣服禮盒" },
+            { icon: "🚗", zh: "汽座保暖罩", en: "Warm car seat cover", q: "嬰兒汽座保暖罩" },
+            { icon: "💤", zh: "防踢被睡袋", en: "Baby sleep sack", q: "嬰兒防踢睡袋" },
+            { icon: "🌡️", zh: "嬰兒體溫計", en: "Baby thermometer", q: "嬰兒耳溫槍" },
+            { icon: "🧺", zh: "尿布更換墊", en: "Changing pad", q: "嬰兒隔尿墊" },
+            { icon: "🎧", zh: "嬰兒抗噪耳罩", en: "Baby earmuff", q: "嬰兒抗噪音耳罩" },
+            { icon: "🎀", zh: "嬰兒包巾", en: "Baby swaddle", q: "嬰兒懶人包巾" },
+            { icon: "🌸", zh: "舒適嬰兒毯", en: "Baby blanket", q: "安撫嬰兒毯" },
+            { icon: "🧸", zh: "安撫玩偶枕", en: "Plush toy pillow", q: "Jellycat+安撫玩偶" },
+            { icon: "✂️", zh: "護理套裝", en: "Nail kit, Nasal aspirator", q: "嬰兒指甲剪+吸鼻器" },
+            { icon: "🌵", zh: "跳舞仙人掌", en: "Moving cactus", q: "跳舞仙人掌玩具" },
+            { icon: "📸", zh: "攝影寫真道具", en: "Baby photo props", q: "新生兒攝影道具" },
+            { icon: "👜", zh: "便攜隔尿墊", en: "Portable changing mat", q: "便攜式換尿布墊" },
+            { icon: "🛏️", zh: "可水洗床墊保護墊", en: "Washable bed pad", q: "可水洗嬰兒床墊" },
+            { icon: "☁️", zh: "嬰兒枕頭", en: "Baby pillow", q: "護頭型嬰兒枕" },
+            { icon: "🧼", zh: "洗髮沐浴組", en: "Baby shampoo & wash", q: "嬰兒沐浴禮盒" },
+            { icon: "🏁", zh: "黑白視覺字卡", en: "Black white card", q: "嬰兒黑白視覺卡" },
+            { icon: "🍼", zh: "奶粉定量盒", en: "Formula dispenser", q: "奶粉盒+分裝" },
+            { icon: "🪥", zh: "幼兒潔牙用品", en: "Teeth cleaning kit", q: "嬰兒潔牙套裝" },
+            { icon: "🧴", zh: "屁屁膏與乳液", en: "Sudocrem, baby cream", q: "嬰兒屁屁膏" },
+            { icon: "🧻", zh: "嬰兒濕紙巾", en: "Baby wipes", q: "嬰兒純水濕紙巾" },
+            { icon: "🧤", zh: "嬰兒小手套", en: "Baby mitten", q: "新生兒手套" }
+        ];
+
+        const grid = document.getElementById('registryGrid');
+        items.forEach(item => {
+            const card = document.createElement('a');
+            card.className = 'item-card ' + (item.class || '');
+            
+            // 使用 Google 搜尋連結
+            const link = item.type === 'special' ? item.link : `https://www.google.com/search?q=${item.q}&tbm=isch`;
+            const btnText = item.type === 'special' ? (item.zh === "紅包祝福" ? "PayMe 連結" : "WhatsApp 聯繫") : "Google 搜尋";
+            
+            card.href = link;
+            card.target = "_blank";
+            
+            card.innerHTML = `
+                <div>
+                    <span class="icon">${item.icon}</span>
+                    <h3>${item.zh}</h3>
+                    <p>${item.en}</p>
+                </div>
+                <span class="btn ${item.btnClass || ''}">${btnText}</span>
+            `;
+            grid.appendChild(card);
+        });
+
+        // --- 7. HEARTS ---
+        const hContainer = document.getElementById('heartContainer');
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 5 + 's';
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+            hContainer.appendChild(heart);
+            setTimeout(() => heart.remove(), 7000);
+        }
+        setInterval(createHeart, 500);
+    </script>
+</body>
+</html>
