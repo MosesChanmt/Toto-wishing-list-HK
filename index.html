@@ -250,7 +250,7 @@ const items = [
             card.className = 'item-card ' + (item.class || '');
             
             // 使用 Google 搜尋連結
-            const link = item.type === 'special' ? item.link : `https://www.google.com/search?q=${item.q}&tbm=isch`;
+            const link = item.type === 'special' ? item.link : `https://www.google.com/search?q=${item.q}&tbm=shop`;
             const btnText = item.type === 'special' ? (item.zh === "紅包祝福" ? "PayMe 連結" : "WhatsApp 聯繫") : "Google 搜尋";
             
             card.href = link;
